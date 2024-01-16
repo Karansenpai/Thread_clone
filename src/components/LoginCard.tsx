@@ -22,6 +22,8 @@ import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
 
 export default function LoginCard() {
+
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const showToast = useShowToast();
@@ -32,6 +34,7 @@ export default function LoginCard() {
   });
 
   const handlelogin = async () => { 
+      setLoading(true);
       try{
 
         console.log(inputs);
@@ -52,8 +55,10 @@ export default function LoginCard() {
       }
       catch(err){
         showToast("Error", (err as Error).message, "error");
+      } finally{
+        setLoading(false);
       }
-  }
+  } 
 
 
   return (
@@ -110,6 +115,7 @@ export default function LoginCard() {
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
                 onClick={handlelogin}
+                isLoading={loading}
               >
                 Log in
               </Button>

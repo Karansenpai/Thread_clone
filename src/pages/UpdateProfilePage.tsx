@@ -30,8 +30,13 @@ export default function UpdateProfilePage() {
 
   const showToast = useShowToast();
 
+  const [updating, setUpdating] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if(updating) return;
+    setUpdating(true);
 
     try {
 
@@ -56,6 +61,8 @@ export default function UpdateProfilePage() {
       localStorage.setItem("user-threads", JSON.stringify(data));
     } catch (err) {
       showToast("Error", (err as Error).message, "error");
+    } finally{
+      setUpdating(false);
     }
   };
 
@@ -173,7 +180,7 @@ export default function UpdateProfilePage() {
                 bg: "green.500",
               }}
               type="submit"
-              // isLoading={updating}
+              isLoading={updating}
             >
               Submit
             </Button>
