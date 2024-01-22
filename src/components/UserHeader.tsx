@@ -15,34 +15,48 @@ import {
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 import { useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import userAtom from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
 import { Link as RouterLink } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
+import mongoose from "mongoose";
 
-type UserHeaderProp = {
-  user: {
-    _id: string;
-    name: string;
-    username: string;
-    bio: string;
-    profilePic: string;
-    followers: string[];
-  };
+
+type userType = {
+  _id?: mongoose.Types.ObjectId;
+  name: string;
+  username: string;
+  profilePic: string;
+  followers: string[];
+  following: string[];
+  posts?: string[];
+  bio: string;
 };
 
-const UserHeader: React.FC<UserHeaderProp> = ({ user }) => {
+
+
+type currentUserType = {
+  _id: string;
+  name: string;
+  username: string;
+  bio: string;
+  profilePic: string;
+};
+
+
+
+const UserHeader = ({ user }: { user: userType }) => {
   const toast = useToast();
 
   const showToast = useShowToast();
 
-  const currentUser = useRecoilValue(userAtom);
+  const currentUser: currentUserType = useRecoilValue(userAtom);
 
   const [updating , setUpdating] = useState(false);
 
   const [following, setFollowing] = useState(
-    user.followers.includes(currentUser._id.toString())
+    user.followers.includes(currentUser?._id)
   );
 
   const copyUrl = (): void => {
@@ -88,7 +102,7 @@ const UserHeader: React.FC<UserHeaderProp> = ({ user }) => {
         user.followers.pop();
       } else{
         showToast("Success", "Followed successfully", "success");
-        user.followers.push(currentUser._id.toString());
+        user.followers.push(currentUser?._id.toString());
       }
       setFollowing(!following);
 
@@ -145,13 +159,13 @@ const UserHeader: React.FC<UserHeaderProp> = ({ user }) => {
 
       <Text>{user.bio}</Text>
 
-      {currentUser._id.toString() === user._id && (
+      {currentUser?._id === user._id?.toString() && (
         <Link as={RouterLink} to="/update">
           <Button size={"sm"}>Update Profile</Button>
         </Link>
       )}
 
-      {currentUser._id.toString() !== user._id && (
+      {currentUser?._id !== user._id?.toString() && (
         <Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
           {following ? "Unfollow" : "Follow"}
         </Button>

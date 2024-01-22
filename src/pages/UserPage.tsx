@@ -1,37 +1,71 @@
 import { useEffect, useState } from "react";
 import UserHeader from "../components/UserHeader";
-import UserPost from "../components/UserPost";
+
 import { useParams } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import { Flex, Spinner } from "@chakra-ui/react";
+import Post from "../components/Post";
+import mongoose from "mongoose";
+import useGetUserProfile from "../hooks/useGetUserProfile";
+import { useRecoilState } from "recoil";
+import postAtom from "../atoms/postAtom";
+
+
+type replyType ={
+  userId: mongoose.Schema.Types.ObjectId,
+  text: string,
+  userProfilePic:string,
+  username: string,
+}
+
+interface PostType {
+  _id: mongoose.Types.ObjectId;
+  postedBy: mongoose.Types.ObjectId;
+  text: string;
+  createdAt: string;
+  likes: string[];
+  replies: replyType[];
+  updatedAt: string;
+  img?: string;
+}
 
 const UserPage = () => {
-  const [user, setUser] = useState(null);
-
+  const {user, loading} = useGetUserProfile();
   const { username } = useParams();
 
   const showToast = useShowToast();
 
-  const [loading, setLoading] = useState(true);
+
+
+  // const [posts, setPosts] = useState<PostType[]>([]);
+  const [posts, setPosts] = useRecoilState(postAtom);
+
+  const [fetching, setFetching] = useState(true);  
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await fetch(`/api/users/profile/${username}`);
+
+
+    const getPosts = async () => {
+      setFetching(true);
+      try{
+
+        const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
-        if (data.error) {
+        if(data.error){
           showToast("Error", data.error, "error");
           return;
         }
-        setUser(data);
-      } catch (err) {
+        setPosts(data);
+
+      }
+      catch(err){
         showToast("Error", (err as Error).message, "error");
       } finally {
-        setLoading(false);
+        setFetching(false);
       }
-    };
+    }
 
-    getUser();
+    getPosts();
   }, [username, showToast]);
 
   if (!user && loading) {
@@ -51,25 +85,16 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
-      <UserPost
-        likes={1200}
-        replies={81}
-        postImage="/post1.png"
-        postTitle="Let's talk about threads."
-      />
-      <UserPost
-        likes={451}
-        replies={11}
-        postImage="/post2.png"
-        postTitle="Nice Tutorial."
-      />
-      <UserPost
-        likes={321}
-        replies={421}
-        postImage="/post3.png"
-        postTitle="Yo dude X sucks."
-      />
-      <UserPost likes={1100} replies={48} postTitle="This is my first thread" />
+      {!fetching && posts.length === 0 && <h1>User has not Posts</h1>}
+      {fetching && (
+        <Flex justifyContent={"center"} my={12}>
+          <Spinner size="xl" />
+        </Flex>
+      )}
+      
+      {posts.map((post) => (
+        <Post key={post._id.toString()} post={post} postedBy={post.postedBy}/>
+      ))}
     </>
   );
 };
