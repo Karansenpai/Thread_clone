@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { generateAndSetCookie } from "../utils/helpers/generateTokenAndSetCookies";
 import {v2 as cloudinary} from "cloudinary";
 import mongoose from "mongoose";
+import Post from "../models/postModal";
 
 const getUserProfile = async (req: Request, res: Response) => {
 
@@ -205,7 +206,22 @@ const updateUser = async(req: Request, res: Response) => {
 
 
         user = await user.save();
-        
+
+        await Post.updateMany(
+            {"replies.userId": userId},
+            {
+                $set: {
+                    "replies.$[reply].username": user.username,
+                    "replies.$[reply].userProfilePic": user.profilePic,
+                }
+            },
+            {
+                arrayFilters: [
+                    {"reply.userId": userId}
+                ]
+            }
+        )
+
         user.password = "";
         res.status(200).json(user)
 

@@ -1,10 +1,11 @@
 import { Button, Flex, FormControl, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter,ModalHeader,ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import mongoose from "mongoose";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { Text, Box } from "@chakra-ui/react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+import postAtom from "../atoms/postAtom";
 
 type replyType = {
   userId: mongoose.Schema.Types.ObjectId;
@@ -28,28 +29,22 @@ type ActionsProps = {
   Post: PostProps;
 };
 
-const Actions: React.FC<ActionsProps> = ({ Post: post_ }) => {
+const Actions: React.FC<ActionsProps> = ({ Post}) => {
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
-  const [liked, setLiked] = useState<boolean>(post_?.likes?.includes(user?._id) ?? false);
-  const [post, setPost] = useState(post_);
+  const [liked, setLiked] = useState<boolean>(Post?.likes?.includes(user?._id) ?? false);
+  const [posts,setPosts] = useRecoilState(postAtom);
   const [liking, setLiking] = useState<boolean>(false);
   const [replying, setReplying] = useState<boolean>(false);
   const [reply, setReply] = useState<string>("");
+
   const {isOpen, onOpen, onClose} = useDisclosure();
-
-
-  useEffect(() => {
-    if (post_ !== undefined) {
-      setPost(post_);
-    }
-  }, [post_]);
 
   const handleLikeAndUnlike = async () => {
     if (liking) return;
     setLiking(true);
 
-    if (!user)
+    if (user.length == 0)
       return showToast(
         "Error",
         "You must be logged in to like a post",
@@ -57,7 +52,7 @@ const Actions: React.FC<ActionsProps> = ({ Post: post_ }) => {
       );
 
     try {
-      const res = await fetch("/api/posts/like/" + post._id, {
+      const res = await fetch("/api/posts/like/" + Post._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -74,9 +69,24 @@ const Actions: React.FC<ActionsProps> = ({ Post: post_ }) => {
       }
 
       if (!liked) {
-        setPost({ ...post, likes: [...post.likes, user._id] });
+        const updatedPost = posts.map((post) => {
+          if (post._id === Post._id) {
+            return { ...post, likes: [...post.likes, user._id] };
+          }
+          return post;
+        })
+        setPosts(updatedPost);
       } else {
-        setPost({ ...post, likes: post.likes.filter((id) => id !== user._id) });
+        const updatedPost = posts.map((post) => {
+          if (post._id === Post._id) {
+            return {
+              ...post,
+              likes: post.likes.filter((id) => id !== user._id),
+            };
+          }
+          return post;
+        })
+        setPosts(updatedPost);
       }
 
       setLiked(!liked);
@@ -88,13 +98,13 @@ const Actions: React.FC<ActionsProps> = ({ Post: post_ }) => {
   };
 
   const handleReply = async() =>{
-    if(!user) return showToast("Error", "You must be logged in to reply to a post", "error");
+    if(user.length == 0) return showToast("Error", "You must be logged in to reply to a post", "error");
 
     if(replying) return;
     setReplying(true);
 
     try{
-      const res = await fetch("/api/posts/reply/" + post._id, {
+      const res = await fetch("/api/posts/reply/" + Post._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +118,16 @@ const Actions: React.FC<ActionsProps> = ({ Post: post_ }) => {
         showToast("Error", data.error, "error");
         return;
       }
-      setPost({...post, replies: [...post.replies, data.reply]});
+
+      const updatedPosts = posts.map((post) =>{
+        if(post._id === Post._id){
+          return {...post, replies: [...post.replies,data]}
+        }
+        return post; 
+      })
+
+      setPosts(updatedPosts);
+     
       showToast("Success", "Reply posted successfully", "success");
       onClose();
       setReply("");
@@ -171,11 +190,11 @@ const Actions: React.FC<ActionsProps> = ({ Post: post_ }) => {
 
       <Flex gap={2} alignItems={"center"}>
           <Text color={"gray.light"} fontSize={"sm"}>
-            {post?.replies?.length} replies
+            {Post?.replies?.length} replies
           </Text>
           <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
           <Text color={"gray.light"} fontSize={"sm"}>
-            {post?.likes?.length} likes
+            {Post?.likes?.length} likes
           </Text>
       </Flex>
       

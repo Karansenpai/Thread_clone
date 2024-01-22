@@ -8,8 +8,9 @@ import Actions from "./Actions";
 import useShowToast from "../hooks/useShowToast";
 import { formatDistanceToNow } from "date-fns";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
+import postAtom from "../atoms/postAtom";
 
 type replyType = {
   userId: mongoose.Schema.Types.ObjectId;
@@ -60,7 +61,7 @@ type currentUserType = {
 const Post: React.FC<PostProps> = ({ post, postedBy }) => {
   const showToast = useShowToast();
   const [user, setUser] = useState<userType>(defaultUser);
-
+  const [posts,setPosts] = useRecoilState(postAtom);
   const navigate = useNavigate();
 
   const currentUser: currentUserType = useRecoilValue(userAtom);
@@ -97,6 +98,7 @@ const Post: React.FC<PostProps> = ({ post, postedBy }) => {
         showToast("Error",data.error,"error");
       }
       showToast("Success","Post deleted successfully","success");
+      setPosts(posts.filter((p) => p._id !== post._id));
 
 
     } 

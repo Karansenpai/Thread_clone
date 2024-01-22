@@ -11,32 +11,15 @@ import {
 import Actions from "../components/Actions";
 import Comment from "../components/Comment";
 import useGetUserProfile from "../hooks/useGetUserProfile";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import useShowToast from "../hooks/useShowToast";
 import { useNavigate, useParams } from "react-router-dom";
-import mongoose from "mongoose";
 import { formatDistanceToNow } from "date-fns";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { DeleteIcon } from "@chakra-ui/icons";
+import postAtom from "../atoms/postAtom";
 
-type replyType = {
-  userId: mongoose.Schema.Types.ObjectId;
-  text: string;
-  userProfilePic: string;
-  username: string;
-};
-
-type PostProps = {
-  _id: mongoose.Types.ObjectId;
-  postedBy: mongoose.Types.ObjectId;
-  text: string;
-  createdAt: string;
-  likes: string[];
-  replies: replyType[];
-  updatedAt: string;
-  img?: string;
-};
 
 type currentUserType = {
   _id: string;
@@ -48,14 +31,18 @@ type currentUserType = {
 
 const PostPage = () => {
   const { user, loading } = useGetUserProfile();
-  const [post, setPost] = useState<PostProps>({} as PostProps);
+
+  const [posts,setPosts] = useRecoilState(postAtom); 
   const showToast = useShowToast();
   const currentUser: currentUserType = useRecoilValue(userAtom);
   const { pid } = useParams();
   const navigate = useNavigate();
 
+  const currentPost = posts[0];
+
   useEffect(() => {
     const getPost = async () => {
+      setPosts([]); 
       try {
         const res = await fetch(`/api/posts/${pid}`);
         const data = await res.json();
@@ -64,7 +51,7 @@ const PostPage = () => {
           showToast("Error", data.error, "error");
           return;
         }
-        setPost(data);
+        setPosts([data]);
       } catch (err) {
         showToast("Error", (err as Error).message, "error");
       }
@@ -76,7 +63,7 @@ const PostPage = () => {
     try{
       if(!window.confirm("Are you sure you want to delete this post?")) return;
 
-      const res = await fetch(`/api/posts/${post._id}`,{
+      const res = await fetch(`/api/posts/${currentPost._id}`,{
         method: "DELETE",
       });
 
@@ -122,7 +109,7 @@ const PostPage = () => {
             textAlign={"right"}
             color={"gray.light"}
           >
-            {post.createdAt && formatDistanceToNow(new Date(post.createdAt))}{" "}
+            {currentPost?.createdAt && formatDistanceToNow(new Date(currentPost?.createdAt))}{" "}
             ago
           </Text>
 
@@ -134,21 +121,21 @@ const PostPage = () => {
         </Flex>
       </Flex>
 
-      <Text my={3}>{post?.text}</Text>
+      <Text my={3}>{currentPost?.text}</Text>
 
-      {post?.img && (
+      {currentPost?.img && (
         <Box
           borderRadius={6}
           overflow={"hidden"}
           border={"1px solid"}
           borderColor={"gray.light"}
         >
-          <Image src={post?.img} w={"full"} />
+          <Image src={currentPost?.img} w={"full"} />
         </Box>
       )}
 
       <Flex gap={3} my={3}>
-        <Actions Post={post} />
+        <Actions Post={currentPost} />
       </Flex>
 
       <Divider my={4} />
@@ -164,11 +151,11 @@ const PostPage = () => {
 
       <Divider my={4} />
 
-      {post.replies?.map((reply) => (
+      {currentPost?.replies?.map((reply) => (
          <Comment
-         key = {reply.userId.toString()}
+         key = {reply?.userId.toString()}
          reply = {reply}
-         lastreply = {reply?.userId === post.replies[post.replies.length - 1]?.userId}
+         lastreply = {reply?.userId === currentPost?.replies[currentPost?.replies.length - 1]?.userId}
        />
       )
       )}

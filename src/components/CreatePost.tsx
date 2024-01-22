@@ -21,9 +21,11 @@ import {
 import { BsFillImageFill } from "react-icons/bs";
 import usePreviewImage from "../hooks/usePreviewImage";
 import { useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+import postAtom from "../atoms/postAtom";
+import { useParams } from "react-router-dom";
 
 const MAX_CHARS = 500;
 
@@ -43,6 +45,10 @@ const CreatePost = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const [posts, setPosts] = useRecoilState(postAtom);
+
+  const {username} = useParams();
+
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = e.target.value;
 
@@ -57,7 +63,6 @@ const CreatePost = () => {
   };
 
   const handleCreatePost = async () => {
-
     setLoading(true);
     try {
       const res = await fetch("/api/posts/create", {
@@ -79,16 +84,18 @@ const CreatePost = () => {
         return;
       }
 
+      if (username === user.username) {
+        setPosts([data, ...posts]);
+      }
       showToast("Success", "Post created successfully", "success");
 
       onClose();
       setPostText("");
       setImgUrl("");
-      
     } catch (err) {
       showToast("Error", (err as Error).message, "error");
-    } finally{
-        setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,7 +168,12 @@ const CreatePost = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleCreatePost} isLoading={loading}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleCreatePost}
+              isLoading={loading}
+            >
               Post
             </Button>
           </ModalFooter>

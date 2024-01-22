@@ -5,29 +5,10 @@ import { useParams } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import { Flex, Spinner } from "@chakra-ui/react";
 import Post from "../components/Post";
-import mongoose from "mongoose";
 import useGetUserProfile from "../hooks/useGetUserProfile";
 import { useRecoilState } from "recoil";
 import postAtom from "../atoms/postAtom";
 
-
-type replyType ={
-  userId: mongoose.Schema.Types.ObjectId,
-  text: string,
-  userProfilePic:string,
-  username: string,
-}
-
-interface PostType {
-  _id: mongoose.Types.ObjectId;
-  postedBy: mongoose.Types.ObjectId;
-  text: string;
-  createdAt: string;
-  likes: string[];
-  replies: replyType[];
-  updatedAt: string;
-  img?: string;
-}
 
 const UserPage = () => {
   const {user, loading} = useGetUserProfile();
@@ -35,9 +16,6 @@ const UserPage = () => {
 
   const showToast = useShowToast();
 
-
-
-  // const [posts, setPosts] = useState<PostType[]>([]);
   const [posts, setPosts] = useRecoilState(postAtom);
 
   const [fetching, setFetching] = useState(true);  
@@ -67,6 +45,7 @@ const UserPage = () => {
 
     getPosts();
   }, [username, showToast]);
+
 
   if (!user && loading) {
     return (

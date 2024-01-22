@@ -7,7 +7,6 @@ import HomePage from "./pages/HomePage";
 import AuthPage from "./pages/AuthPage";
 import { useRecoilValue } from "recoil";
 import userAtom from "./atoms/userAtom";
-import LogoutButton from "./components/LogoutButton";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import CreatePost from "./components/CreatePost";
 
@@ -19,25 +18,43 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={!(user.length === 0) ? <HomePage /> : <Navigate to="/auth" />}
+          element={
+            !(user.length === 0) ? <HomePage /> : <Navigate to="/auth" />
+          }
         />
         <Route
           path="/auth"
-          element={user.length==0 ? <AuthPage /> : <Navigate to="/" />}
+          element={user.length == 0 ? <AuthPage /> : <Navigate to="/" />}
         />
-        <Route path ="/update" element={!(user.length === 0) ? <UpdateProfilePage/> : <Navigate to="/auth" />} />
-        <Route path="/:username" element={<UserPage />} />
+        <Route
+          path="/update"
+          element={
+            !(user.length === 0) ? (
+              <UpdateProfilePage />
+            ) : (
+              <Navigate to="/auth" />
+            )
+          }
+        />
+        <Route
+          path="/:username"
+          element={
+            !(user.length === 0) ? (
+              <>
+                <UserPage />
+                <CreatePost />
+              </>
+            ) : (
+              <UserPage />
+            )
+          }
+        />
         <Route path="/:username/post/:pid" element={<PostPage />} />
       </Routes>
 
-      {!(user.length === 0) && <LogoutButton />}
-      {!(user.length === 0) && <CreatePost/>}
 
     </Container>
   );
-
-
-
 }
 
 export default App;

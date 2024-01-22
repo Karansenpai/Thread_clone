@@ -41,7 +41,7 @@ const createPost = async (req: Request, res: Response) => {
         
         await newPost.save();
 
-        res.status(201).json({message: "Post created successfully", post: newPost});
+        res.status(201).json(newPost);
 
 
     }
@@ -182,7 +182,7 @@ const replyToPost = async(req: Request, res: Response) => {
 
         await post.save();
 
-        res.status(200).json({message: "Reply added successfully", post});
+        res.status(200).json(reply);
     }
     catch(err){
         res.status(500).json({error: (err as Error).message})

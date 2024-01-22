@@ -2,33 +2,20 @@ import {Flex, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import Post from "../components/Post";
-import mongoose from "mongoose";
+import { useRecoilState } from "recoil";
+import postAtom from "../atoms/postAtom";
 
-
-type replyType ={
-  userId: mongoose.Schema.Types.ObjectId,
-  text: string,
-  userProfilePic:string,
-  username: string,
-}
-interface PostType {
-  _id: mongoose.Types.ObjectId;
-  postedBy: mongoose.Types.ObjectId;
-  text: string;
-  createdAt: string;
-  likes: string[];
-  replies: replyType[];
-  updatedAt: string;
-  img?: string;
-}
 
 const HomePage = () => {
   const showToast = useShowToast();
 
-  const [posts, setPosts] = useState<PostType[]>([]);
+
+
+  const [posts, setPosts] = useRecoilState(postAtom);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setPosts([]);
     const getfeedPosts = async () => {
       setLoading(true);
 
