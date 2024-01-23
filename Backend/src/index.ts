@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import userRoute from "../routes/userRoute";
 import postRoutes from "../routes/postRoutes";
 import {v2 as cloudinary} from "cloudinary";
+import cors from "cors";
 
 dotenv.config();
 connectDB();
@@ -13,6 +14,12 @@ connectDB();
 
 
 const app = express();
+
+app.use(cors({
+    origin: "https://karansenpai-app-frontend.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 
 
 const PORT = process.env.PORT || 5000;
