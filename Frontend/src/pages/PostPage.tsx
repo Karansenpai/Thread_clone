@@ -19,7 +19,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import postAtom from "../atoms/postAtom";
-
+import {BASE_URL} from "../config"
 
 type currentUserType = {
   _id: string;
@@ -44,7 +44,7 @@ const PostPage = () => {
     const getPost = async () => {
       setPosts([]); 
       try {
-        const res = await fetch(`/api/posts/${pid}`);
+        const res = await fetch(`${BASE_URL}/api/posts/${pid}`);
         const data = await res.json();
 
         if (data.error) {
@@ -63,7 +63,7 @@ const PostPage = () => {
     try{
       if(!window.confirm("Are you sure you want to delete this post?")) return;
 
-      const res = await fetch(`/api/posts/${currentPost._id}`,{
+      const res = await fetch(`${BASE_URL}/api/posts/${currentPost._id}`,{
         method: "DELETE",
       });
 

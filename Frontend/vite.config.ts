@@ -9,11 +9,11 @@ export default defineConfig({
 
     //get rid of the cors error
     proxy: {
-      "/api": {
-        target: "http://localhost:3000",
-        changeOrigin : true,
+      '/api': {
+        target: 'https://karansenpai-app.onrender.com',
+        changeOrigin: true,
         secure: false,
-      }
-    }
+      },
+    },
   }
 })

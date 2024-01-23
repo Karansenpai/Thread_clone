@@ -6,7 +6,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import postAtom from "../atoms/postAtom";
-
+import {BASE_URL} from "../config"
 type replyType = {
   userId: mongoose.Schema.Types.ObjectId;
   text: string;
@@ -52,7 +52,7 @@ const Actions: React.FC<ActionsProps> = ({ Post}) => {
       );
 
     try {
-      const res = await fetch("/api/posts/like/" + Post._id, {
+      const res = await fetch(`${BASE_URL}/api/posts/like/` + Post._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +104,7 @@ const Actions: React.FC<ActionsProps> = ({ Post}) => {
     setReplying(true);
 
     try{
-      const res = await fetch("/api/posts/reply/" + Post._id, {
+      const res = await fetch(`${BASE_URL}/api/posts/reply/` + Post._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

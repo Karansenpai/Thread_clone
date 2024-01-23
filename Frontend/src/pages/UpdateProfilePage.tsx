@@ -16,7 +16,7 @@ import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import usePreviewImage from "../hooks/usePreviewImage";
 import useShowToast from "../hooks/useShowToast";
-
+import {BASE_URL} from "../config"
 export default function UpdateProfilePage() {
   const [user, setUser] = useRecoilState(userAtom);
 
@@ -40,7 +40,7 @@ export default function UpdateProfilePage() {
 
     try {
 
-      const res = await fetch(`/api/users/update/${user._id}`, {
+      const res = await fetch(`${BASE_URL}/api/users/update/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -21,7 +21,7 @@ import { useRecoilValue } from "recoil";
 import { Link as RouterLink } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import mongoose from "mongoose";
-
+import {BASE_URL} from "../config"
 
 type userType = {
   _id?: mongoose.Types.ObjectId;
@@ -83,7 +83,7 @@ const UserHeader = ({ user }: { user: userType }) => {
     setUpdating(true);
 
     try {
-      const res = await fetch(`/api/users/follow/${user._id}`, {
+      const res = await fetch(`${BASE_URL}/api/users/follow/${user._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

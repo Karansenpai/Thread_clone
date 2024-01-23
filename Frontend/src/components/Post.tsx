@@ -11,6 +11,8 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postAtom from "../atoms/postAtom";
+import {BASE_URL} from "../config"
+
 
 type replyType = {
   userId: mongoose.Schema.Types.ObjectId;
@@ -69,7 +71,7 @@ const Post: React.FC<PostProps> = ({ post, postedBy }) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await fetch("/api/users/profile/" + postedBy);
+        const res = await fetch(`${BASE_URL}/api/users/profile/` + postedBy);
         const data = await res.json();
         if (data.error) {
           showToast("Error", data.error, "error");
@@ -89,7 +91,7 @@ const Post: React.FC<PostProps> = ({ post, postedBy }) => {
       e.preventDefault();
       if(!window.confirm("Are you sure you want to delete this post?")) return;
 
-      const res = await fetch(`/api/posts/${post._id}`,{
+      const res = await fetch(`${BASE_URL}/api/posts/${post._id}`,{
         method: "DELETE",
       });
 

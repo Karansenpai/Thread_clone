@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom';
 import useShowToast from './useShowToast';
 import mongoose from 'mongoose';
-
+import {BASE_URL} from "../config"
 
 type userType = {
   _id?: mongoose.Types.ObjectId;
@@ -38,7 +38,7 @@ const useGetUserProfile = () => {
   useEffect(()=>{
     const getUser = async () => {
       try {
-        const res = await fetch(`/api/users/profile/${username}`);
+        const res = await fetch(`${BASE_URL}/api/users/profile/${username}`);
         const data = await res.json();
         if (data.error) {
           showToast("Error", data.error, "error");
