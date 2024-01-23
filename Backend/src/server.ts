@@ -1,10 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import connectDB  from "./db/connectDb"
+import connectDB  from "../db/connectDb"
 import { urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
-import userRoute from "./routes/userRoute";
-import postRoutes from "./routes/postRoutes";
+import userRoute from "../routes/userRoute";
+import postRoutes from "../routes/postRoutes";
 import {v2 as cloudinary} from "cloudinary";
 
 dotenv.config();
