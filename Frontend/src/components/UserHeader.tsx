@@ -83,7 +83,7 @@ const UserHeader = ({ user }: { user: userType }) => {
     setUpdating(true);
 
     try {
-      const res = await fetch(`${BASE_URL}/api/users/follow/${user._id}`, {
+      const res = await fetch(`/api/users/follow/${user._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

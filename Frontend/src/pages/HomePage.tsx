@@ -7,10 +7,8 @@ import postAtom from "../atoms/postAtom";
 import {BASE_URL} from "../config"
 
 const HomePage = () => {
+  
   const showToast = useShowToast();
-
-
-
   const [posts, setPosts] = useRecoilState(postAtom);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +18,7 @@ const HomePage = () => {
       setLoading(true);
 
       try {
-        const res = await fetch(`${BASE_URL}/api/posts/feed`);
+        const res = await fetch(`/api/posts/feed`);
         const data = await res.json();
         if (data.error) {
           showToast("Error", data.error, "error");

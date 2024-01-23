@@ -27,7 +27,7 @@ const UserPage = () => {
       setFetching(true);
       try{
 
-        const res = await fetch(`${BASE_URL}/api/posts/user/${username}`);
+        const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
         if(data.error){
           showToast("Error", data.error, "error");
