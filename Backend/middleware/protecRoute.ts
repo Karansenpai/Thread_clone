@@ -6,7 +6,6 @@ const protectRoute = async(req: Request, res: Response, next: NextFunction) => {
 
         
         const token = req.cookies.jwt;
-        console.log(token);
         if (!token) {
             return res.status(401).json({ message: "You need to be logged in" });
         }
