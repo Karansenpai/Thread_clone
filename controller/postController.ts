@@ -166,7 +166,7 @@ const replyToPost = async(req: Request, res: Response) => {
         const username = user?.username;
 
         if(!text){
-            return res.status(400).json({errore: "Text is required"});
+            return res.status(400).json({error: "Text is required"});
         }
 
         const post = await Post.findById(postId);

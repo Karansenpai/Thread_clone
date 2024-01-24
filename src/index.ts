@@ -6,20 +6,20 @@ import cookieParser from "cookie-parser";
 import userRoute from "../routes/userRoute";
 import postRoutes from "../routes/postRoutes";
 import {v2 as cloudinary} from "cloudinary";
-import cors from "cors";
+import path from "path";
 
 dotenv.config();
 connectDB();
 
-
+const __dirname = path.resolve();
 
 const app = express();
 
-// app.use(cors({
-//     origin: "https://karansenpai-app-frontend.onrender.com",
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     credentials: true
-// }));
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get("*",(req,res) =>{
+    res.sendFile(path.join(__dirname, '/client/dist/index.html'));
+})
 
 
 const PORT = process.env.PORT || 5000;
