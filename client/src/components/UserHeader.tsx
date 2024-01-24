@@ -21,7 +21,7 @@ import { useRecoilValue } from "recoil";
 import { Link as RouterLink } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import mongoose from "mongoose";
-import {BASE_URL} from "../config"
+
 
 type userType = {
   _id?: mongoose.Types.ObjectId;

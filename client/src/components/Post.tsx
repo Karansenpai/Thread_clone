@@ -11,7 +11,6 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postAtom from "../atoms/postAtom";
-import {BASE_URL} from "../config"
 
 
 type replyType = {

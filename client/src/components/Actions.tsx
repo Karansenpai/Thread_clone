@@ -6,7 +6,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import postAtom from "../atoms/postAtom";
-import {BASE_URL} from "../config"
 type replyType = {
   userId: mongoose.Schema.Types.ObjectId;
   text: string;

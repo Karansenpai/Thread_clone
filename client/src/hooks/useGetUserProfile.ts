@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom';
 import useShowToast from './useShowToast';
 import mongoose from 'mongoose';
-import {BASE_URL} from "../config"
+
 
 type userType = {
   _id?: mongoose.Types.ObjectId;

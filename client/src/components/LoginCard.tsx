@@ -20,7 +20,7 @@ import { useSetRecoilState } from "recoil";
 import { authScreenAtom } from "../atoms/authAtom";
 import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
-import {BASE_URL} from "../config"
+
 export default function LoginCard() {
 
   const [loading, setLoading] = useState(false);

@@ -26,7 +26,6 @@ import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import postAtom from "../atoms/postAtom";
 import { useParams } from "react-router-dom";
-import {BASE_URL} from "../config"
 const MAX_CHARS = 500;
 
 const CreatePost = () => {

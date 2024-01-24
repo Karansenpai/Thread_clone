@@ -8,7 +8,7 @@ import Post from "../components/Post";
 import useGetUserProfile from "../hooks/useGetUserProfile";
 import { useRecoilState } from "recoil";
 import postAtom from "../atoms/postAtom";
-import {BASE_URL} from "../config"
+
 
 const UserPage = () => {
   const {user, loading} = useGetUserProfile();

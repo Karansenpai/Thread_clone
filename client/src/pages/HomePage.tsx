@@ -4,7 +4,7 @@ import useShowToast from "../hooks/useShowToast";
 import Post from "../components/Post";
 import { useRecoilState } from "recoil";
 import postAtom from "../atoms/postAtom";
-import {BASE_URL} from "../config"
+
 
 const HomePage = () => {
   

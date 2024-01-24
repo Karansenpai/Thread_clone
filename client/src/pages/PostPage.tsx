@@ -19,7 +19,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import postAtom from "../atoms/postAtom";
-import {BASE_URL} from "../config"
+
 
 type currentUserType = {
   _id: string;

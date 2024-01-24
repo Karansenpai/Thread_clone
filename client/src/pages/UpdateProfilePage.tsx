@@ -16,7 +16,7 @@ import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import usePreviewImage from "../hooks/usePreviewImage";
 import useShowToast from "../hooks/useShowToast";
-import {BASE_URL} from "../config"
+
 export default function UpdateProfilePage() {
   const [user, setUser] = useRecoilState(userAtom);
 

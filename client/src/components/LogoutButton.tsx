@@ -3,7 +3,6 @@ import { useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import {FiLogOut} from "react-icons/fi"
-import {BASE_URL} from "../config"
 const LogoutButton = () => {
 
   const setUser = useSetRecoilState(userAtom)

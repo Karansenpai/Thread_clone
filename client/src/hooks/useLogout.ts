@@ -1,7 +1,7 @@
 import { useSetRecoilState } from 'recoil';
 import useShowToast from './useShowToast';
 import userAtom from '../atoms/userAtom';
-import {BASE_URL} from "../config"
+
 
 const useLogout = () => {
 
