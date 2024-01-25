@@ -19,9 +19,6 @@ put these in .env file
 
 4) npm run dev
 
-
-
-
 For Frontend
 in root directory
 
