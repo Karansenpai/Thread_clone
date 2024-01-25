@@ -1,12 +1,6 @@
 # React + TypeScript + Vite
 
-Setup Guide:
-
-For Backend
-
-1) cd Backend/
-2) npm install
-3) create a .env file inside backend folder containing
+1) create a .env file inside backend folder containing
 
 PORT = 3000
 MONGO_URI = 
@@ -17,13 +11,8 @@ CLOUDINARY_API_SECRET=
 
 put these in .env file
 
-4) npm run dev
-
-For Frontend
-in root directory
-
-1) npm install
-2) npm run dev
+2) npm run build
+3) npm start
 
 
 
