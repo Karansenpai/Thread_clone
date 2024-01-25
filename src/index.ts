@@ -35,9 +35,6 @@ app.use("/api/users", userRoute);
 
 app.use("/api/posts", postRoutes);
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
-})
 
 app.use(express.static(path.join(dirname, "/client/dist")));
 
