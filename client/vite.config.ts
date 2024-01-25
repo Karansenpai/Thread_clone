@@ -6,12 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     //get rid of the cors error
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:3000',
+    //     changeOrigin: true,
+    //     secure: false,
+    //   },
+    // },
   }
 })

@@ -11,18 +11,10 @@ import path from "path";
 dotenv.config();
 connectDB();
 
-
 const app = express();
 
-console.log("dirname: ", __dirname);
-console.log("dirname: ", path.join(__dirname, '../client/dist'));
-console.log("dirname: ", path.join(__dirname, '../client/dist/index.html'));
+const dirname = path.resolve();
 
-// app.use(express.static(path.join(__dirname, '/client/dist')));
-
-// app.get("*",(req,res) =>{
-//     res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-// })
 
 
 const PORT = process.env.PORT || 5000;
@@ -46,6 +38,13 @@ app.use("/api/posts", postRoutes);
 app.get("/", (req, res) => {
     res.send("Hello World");
 })
+
+app.use(express.static(path.join(dirname, "/client/dist")));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(dirname, "/client/dist/index.html"));
+});
+
 
 app.listen(PORT, ()=> console.log(`Server running on http://localhost:${PORT}`));
 
