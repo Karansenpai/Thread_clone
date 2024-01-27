@@ -1,6 +1,6 @@
 # React + TypeScript + Vite
 
-1) create a .env file inside backend folder containing
+1) create a .env file inside root folder containing
 
 PORT = 3000
 MONGO_URI = 
